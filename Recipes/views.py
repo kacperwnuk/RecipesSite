@@ -4,8 +4,16 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from Recipes.models import Recipe
-from Recipes.serializer import RecipeSerializer
+from Recipes.models import Recipe, Ingredient, Category, Comment, Rating, User
+from Recipes.serializer import RecipeSerializer, IngredientSerializer, CategorySerializer, CommentSerializer, \
+    RatingSerializer, UserSerializer
+
+
+class IndexView(APIView):
+
+    def get(self, request):
+        list_of_urls = ['recipes', 'recipes/<int:pk>', 'ingredients', 'categories', 'ratings', 'comments', 'users']
+        return Response(list_of_urls, status=status.HTTP_200_OK)
 
 
 class AllRecipes(ListAPIView):
@@ -29,3 +37,63 @@ class RecipeView(APIView):
             return Response(serializer.data)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class IngredientsView(ListAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+
+    def post(self, request):
+        serializer = IngredientSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CategoriesView(ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def post(self, request):
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentsView(ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def post(self, request):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RatingsView(ListAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+
+    def post(self, request):
+        serializer = RatingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UsersView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
