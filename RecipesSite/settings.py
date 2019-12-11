@@ -29,6 +29,11 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'recipes-app-apsi.herokuapp.com']
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Recipes.apps.RecipesConfig',
     'rest_framework',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [

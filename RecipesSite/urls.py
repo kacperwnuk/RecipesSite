@@ -15,11 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from rest_framework_swagger.views import get_swagger_view
 
 import Recipes.views as recipe_views
 
+schema_view = get_swagger_view(title='Pastebin API')
+
+
 urlpatterns = [
-    path('', recipe_views.IndexView.as_view()),
+    path('', schema_view),
     path('admin/', admin.site.urls),
     path('recipes', recipe_views.AllRecipes.as_view()),
     path('recipes/<int:pk>', recipe_views.RecipeView.as_view()),

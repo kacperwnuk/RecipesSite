@@ -3,18 +3,21 @@ from django.contrib.auth.models import User as BaseUser
 from Recipes.models import Recipe, Ingredient, Category, Comment, Rating, User
 
 
-class RecipeSerializer(serializers.ModelSerializer):
-    categories = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Category.objects.all())
-    ingredients = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Ingredient.objects.all())
+class IngredientSerializer(serializers.ModelSerializer):
+    replacements = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Ingredient.objects.all())
 
     class Meta:
-        model = Recipe
+        model = Ingredient
         fields = '__all__'
 
 
-class IngredientSerializer(serializers.ModelSerializer):
+class RecipeSerializer(serializers.ModelSerializer):
+    categories = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Category.objects.all())
+    ingredients = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Ingredient.objects.all())
+    # ingredients = IngredientSerializer(many=True)
+
     class Meta:
-        model = Ingredient
+        model = Recipe
         fields = '__all__'
 
 
