@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from Recipes.models import Recipe, Ingredient, Category, Comment, Rating, User
 from Recipes.serializer import RecipeSerializer, IngredientSerializer, CategorySerializer, CommentSerializer, \
@@ -17,6 +18,8 @@ class IndexView(APIView):
 
 
 class AllRecipes(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
@@ -29,6 +32,7 @@ class AllRecipes(ListAPIView):
 
 
 class RecipeView(APIView):
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk, format=None):
         try:
@@ -40,6 +44,8 @@ class RecipeView(APIView):
 
 
 class IngredientsView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
 
@@ -52,6 +58,8 @@ class IngredientsView(ListAPIView):
 
 
 class CategoriesView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -64,6 +72,8 @@ class CategoriesView(ListAPIView):
 
 
 class CommentsView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
@@ -76,6 +86,8 @@ class CommentsView(ListAPIView):
 
 
 class RatingsView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
 

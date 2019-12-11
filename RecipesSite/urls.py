@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from rest_framework_swagger.views import get_swagger_view
+from rest_framework.authtoken.views import obtain_auth_token
 
 import Recipes.views as recipe_views
 
@@ -32,5 +33,6 @@ urlpatterns = [
     path('ratings', recipe_views.RatingsView.as_view()),
     path('comments', recipe_views.CommentsView.as_view()),
     path('users', recipe_views.UsersView.as_view()),
+	path('auth', obtain_auth_token),
 
 ]
