@@ -59,7 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         basic_data = validated_data.pop('basic_info')
         favourite_recipes = validated_data.pop('favourite_recipes')
-        base_user = BaseUser.objects.create(**basic_data)
+        base_user = BaseUser.objects.create_user(**basic_data)
         user = User.objects.create(basic_info=base_user, **validated_data)
         user.favourite_recipes.add(*favourite_recipes)
         return user
