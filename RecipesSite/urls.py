@@ -29,10 +29,13 @@ urlpatterns = [
     path('recipes', recipe_views.AllRecipes.as_view()),
     path('recipes/<int:pk>', recipe_views.RecipeView.as_view()),
     path('ingredients', recipe_views.IngredientsView.as_view()),
+    path('ingredients/<int:pk>', recipe_views.IngredientView.as_view()),
     path('categories', recipe_views.CategoriesView.as_view()),
+    path('categories/<int:pk>', recipe_views.CategoryView.as_view()),
     path('ratings', recipe_views.RatingsView.as_view()),
     path('comments', recipe_views.CommentsView.as_view()),
     path('users', recipe_views.UsersView.as_view()),
+    path('users/<int:pk>', recipe_views.UserView.as_view()),
 	path('auth', obtain_auth_token),
 
 ]

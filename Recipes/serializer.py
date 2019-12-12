@@ -13,8 +13,8 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     categories = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Category.objects.all())
-    ingredients = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Ingredient.objects.all())
-    # ingredients = IngredientSerializer(many=True)
+    # ingredients = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Ingredient.objects.all())
+    ingredients = IngredientSerializer(many=True)
 
     class Meta:
         model = Recipe

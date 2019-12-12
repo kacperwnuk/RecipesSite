@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -31,16 +31,18 @@ class AllRecipes(ListAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RecipeView(APIView):
+class RecipeView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
 
-    def get(self, request, pk, format=None):
-        try:
-            recipe = Recipe.objects.get(pk=pk)
-            serializer = RecipeSerializer(recipe)
-            return Response(serializer.data)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    # def get(self, request, pk, format=None):
+    #     try:
+    #         recipe = Recipe.objects.get(pk=pk)
+    #         serializer = RecipeSerializer(recipe)
+    #         return Response(serializer.data)
+    #     except:
+    #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class IngredientsView(ListAPIView):
@@ -57,6 +59,13 @@ class IngredientsView(ListAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class IngredientView(RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+
+
 class CategoriesView(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
@@ -69,6 +78,13 @@ class CategoriesView(ListAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CategoryView(RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
 class CommentsView(ListAPIView):
@@ -109,3 +125,10 @@ class UsersView(ListAPIView):
             serializer.save()
             return Response("", status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserView(RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
