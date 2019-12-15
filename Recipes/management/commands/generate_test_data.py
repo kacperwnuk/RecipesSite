@@ -14,6 +14,9 @@ USERS_PATH = os.path.join(MODULE_PATH, 'users.json')
 REPLACEMENTS_PATH = os.path.join(MODULE_PATH, 'replacements.json')
 ACTIVITIES_PATH = os.path.join(MODULE_PATH, 'activities.json')
 
+DEVELOPER_NICKNAME = 'developer'
+DEVELOPER_PASSWORD = 'apsi-developer'
+DEVELOPER_ACTIVE = True
 SEED = 1
 DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 RECIPES_FREQUENCIES = {
@@ -49,8 +52,8 @@ class Command(BaseCommand):
             random.shuffle(activities)
 
         # users
-        User.objects.all().delete()
-        get_user_model().objects.filter(is_superuser=False).delete()
+        User.objects.exclude(nickname='developer').delete()
+        get_user_model().objects.filter(is_superuser=False).exclude(username='developer').delete()
         django_users = []
         for user in users:
             django_users.append(
@@ -66,6 +69,24 @@ class Command(BaseCommand):
                     )
                 )
             )
+
+        if DEVELOPER_ACTIVE:
+            if not User.objects.filter(nickname='developer'):
+                new_user = User.objects.create(
+                    nickname=DEVELOPER_NICKNAME,
+                    bio='',
+                    basic_info=get_user_model().objects.create_user(
+                        username=DEVELOPER_NICKNAME,
+                        email='developer@mail.com',
+                        first_name='Apsi',
+                        last_name='Developer',
+                    )
+                )
+                new_user.basic_info.set_password(DEVELOPER_PASSWORD)
+                new_user.basic_info.save()
+        else:
+            User.objects.filter(nickname='developer').delete()
+            get_user_model().objects.filter(username='developer').delete()
 
         # recipes, ingredients, categories
         Ingredient.objects.all().delete()
