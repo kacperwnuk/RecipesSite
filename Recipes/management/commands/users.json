@@ -1,0 +1,142 @@
+[
+    {
+        "name": "Keanu",
+        "surname": "Lauwers",
+        "username": "klauwers6",
+        "email": "keanu.lauwers@mail.com",
+        "date_joined": "2019-10-06 16:02:02"
+    },
+    {
+        "name": "Eliezer",
+        "surname": "Scarangella",
+        "username": "escarangella13",
+        "email": "eliezer.scarangella@mail.com",
+        "date_joined": "2019-10-13 13:29:33"
+    },
+    {
+        "name": "Asim",
+        "surname": "Cobern",
+        "username": "acobern15",
+        "email": "asim.cobern@mail.com",
+        "date_joined": "2019-11-15 09:10:35"
+    },
+    {
+        "name": "Saad",
+        "surname": "Nordhus",
+        "username": "snordhus10",
+        "email": "saad.nordhus@mail.com",
+        "date_joined": "2019-11-10 08:09:02"
+    },
+    {
+        "name": "Lebron",
+        "surname": "Stricklan",
+        "username": "lstricklan11",
+        "email": "lebron.stricklan@mail.com",
+        "date_joined": "2019-10-11 20:54:25"
+    },
+    {
+        "name": "Cheyenne",
+        "surname": "Hendley",
+        "username": "chendley14",
+        "email": "cheyenne.hendley@mail.com",
+        "date_joined": "2019-10-14 11:35:51"
+    },
+    {
+        "name": "Akil",
+        "surname": "Chaput",
+        "username": "achaput12",
+        "email": "akil.chaput@mail.com",
+        "date_joined": "2019-11-12 16:56:12"
+    },
+    {
+        "name": "Wilburt",
+        "surname": "Peon",
+        "username": "wpeon2",
+        "email": "wilburt.peon@mail.com",
+        "date_joined": "2019-10-02 13:41:03"
+    },
+    {
+        "name": "Daijohn",
+        "surname": "Benik",
+        "username": "dbenik23",
+        "email": "daijohn.benik@mail.com",
+        "date_joined": "2019-10-23 23:14:59"
+    },
+    {
+        "name": "Lavon",
+        "surname": "Doornink",
+        "username": "ldoornink15",
+        "email": "lavon.doornink@mail.com",
+        "date_joined": "2019-10-15 13:53:15"
+    },
+    {
+        "name": "Cayleigh",
+        "surname": "Reierson",
+        "username": "creierson25",
+        "email": "cayleigh.reierson@mail.com",
+        "date_joined": "2019-10-25 22:09:02"
+    },
+    {
+        "name": "Florette",
+        "surname": "Kennerknecht",
+        "username": "fkennerknecht5",
+        "email": "florette.kennerknecht@mail.com",
+        "date_joined": "2019-11-05 00:16:28"
+    },
+    {
+        "name": "Nacole",
+        "surname": "Selk",
+        "username": "nselk4",
+        "email": "nacole.selk@mail.com",
+        "date_joined": "2019-10-04 08:16:16"
+    },
+    {
+        "name": "Rosalene",
+        "surname": "Kersh",
+        "username": "rkersh15",
+        "email": "rosalene.kersh@mail.com",
+        "date_joined": "2019-11-15 07:46:09"
+    },
+    {
+        "name": "Aneta",
+        "surname": "Lanteigne",
+        "username": "alanteigne6",
+        "email": "aneta.lanteigne@mail.com",
+        "date_joined": "2019-10-06 03:17:01"
+    },
+    {
+        "name": "Kelsie",
+        "surname": "Baribeault",
+        "username": "kbaribeault17",
+        "email": "kelsie.baribeault@mail.com",
+        "date_joined": "2019-10-17 01:13:56"
+    },
+    {
+        "name": "Magdalena",
+        "surname": "Dieckhaus",
+        "username": "mdieckhaus23",
+        "email": "magdalena.dieckhaus@mail.com",
+        "date_joined": "2019-11-23 06:01:12"
+    },
+    {
+        "name": "Etta",
+        "surname": "Gilespie",
+        "username": "egilespie26",
+        "email": "etta.gilespie@mail.com",
+        "date_joined": "2019-11-26 10:38:34"
+    },
+    {
+        "name": "Anett",
+        "surname": "Dechert",
+        "username": "adechert29",
+        "email": "anett.dechert@mail.com",
+        "date_joined": "2019-10-29 09:35:14"
+    },
+    {
+        "name": "Marcelline",
+        "surname": "Ringland",
+        "username": "mringland16",
+        "email": "marcelline.ringland@mail.com",
+        "date_joined": "2019-11-16 04:53:32"
+    }
+]

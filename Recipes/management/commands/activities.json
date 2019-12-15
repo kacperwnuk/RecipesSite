@@ -1,0 +1,50 @@
+ [
+	{
+		"rating": [3, 5],
+		"comment": "This sounds interesting! Gonna try that :)"
+	},
+	{
+		"rating": [1, 2],
+		"comment": "Yak! Disgusting :("
+	},
+	{
+		"rating": [4, 5],
+		"comment": "Perfect dish for the whole family! My family liked it a lot."
+	},
+	{
+		"rating": [2, 3],
+		"comment": "This was quite difficult for me to do, but was super-delicious!"
+	},
+	{
+		"rating": [1, 2],
+		"comment": "Instructions unclear!"
+	},
+	{
+		"rating": [1, 2],
+		"comment": null
+	},
+	{
+		"rating": [3, 4],
+		"comment": null
+	},
+	{
+		"rating": [4, 5],
+		"comment": null
+	},
+	{
+		"rating": [4, 5],
+		"comment": "Very easy and also yummy, my kids enjoyed it very much :)"
+	},
+	{
+		"rating": [3, 4],
+		"comment": "It takes much time to finish but tastes nice!"
+	},
+	{
+		"rating": [1, 2],
+		"comment": "I wouldn't recommend it even to my enemy -.-"
+	},
+	{
+		"rating": [2, 3],
+		"comment": "Too difficult, I ordered a pizza instead :P"
+	}
+ ]
