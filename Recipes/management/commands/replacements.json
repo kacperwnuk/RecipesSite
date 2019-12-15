@@ -1,36 +1,55 @@
-{
-    "tofu": "hummus",
-    "tuna": "squid",
-    "soya": "hummus",
-    "seitan": "hummus",
-    "tempeh": "hummus",
-    "falafel": "hummus",
-    "hummus": "falafel",
-    "salmon": "squid",
-    "trout": "squid",
-    "shrimp": "squid",
-    "crab": "squid",
-    "octopus": "squid",
-    "squid": "octopus",
-    "beef": "pork",
-    "meat": "pork",
-    "chicken": "pork",
-    "poultry": "pork",
-    "pork": "poultry",
-    "cheese": "goat cheese",
-    "white cheese": "goat cheese",
-    "goat cheese": "white cheese",
-    "butter": "olive oil",
-    "olive": "margarine",
-    "oil": "butter",
-    "margarine": "oil",
-    "milk": "rice milk",
-    "soya milk": "rice milk",
-    "coconut milk": "rice milk",
-    "goat milk": "rice milk",
-    "rice milk": "goat milk",
-    "coconut oil": "butter",
-    "olive oil": "butter",
-    "potatoes": "rice",
-    "rice": "potatoes"
-}
+[
+    [
+        "tofu",
+        "tuna",
+        "soya",
+        "seitan",
+        "tempeh",
+        "falafel",
+        "hummus"
+    ],
+    [
+        "tuna",
+        "salmon",
+        "trout",
+        "shrimp",
+        "crab",
+        "octopus",
+        "squid"
+    ],
+    [
+        "beef",
+        "meat",
+        "chicken",
+        "poultry",
+        "pork"
+    ],
+    [
+        "cheese",
+        "white cheese",
+        "goat cheese"
+    ],
+    [
+        "butter",
+        "olive",
+        "oil",
+        "margarine"
+    ],
+    [
+        "milk",
+        "soya milk",
+        "coconut milk",
+        "goat milk",
+        "rice milk"
+    ],
+    [
+        "oil",
+        "coconut oil",
+        "olive oil",
+        "butter"
+    ],
+    [
+        "potatoes",
+        "rice"
+    ]
+]

@@ -16,7 +16,7 @@ ACTIVITIES_PATH = os.path.join(MODULE_PATH, 'activities.json')
 
 DEVELOPER_NICKNAME = 'developer'
 DEVELOPER_PASSWORD = 'apsi-developer'
-DEVELOPER_ACTIVE = True
+DEVELOPER_ACTIVE = False
 SEED = 1
 DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 RECIPES_FREQUENCIES = {
@@ -50,6 +50,9 @@ class Command(BaseCommand):
         with open(ACTIVITIES_PATH) as activities_file:
             activities = json.load(activities_file)
             random.shuffle(activities)
+        with open(REPLACEMENTS_PATH) as replacements_file:
+            replacements = json.load(replacements_file)
+            random.shuffle(replacements)
 
         # users
         User.objects.exclude(nickname='developer').delete()
@@ -153,3 +156,19 @@ class Command(BaseCommand):
                     Comment.objects.create(user=user, recipe=recipe, text=activity['comment'])
 
             user.save()
+
+        for group in replacements:
+            for ingredient_name in group:
+                if not ingredient_name in ingredients_mapping:
+                    ingredients_mapping[ingredient_name] = Ingredient.objects.create(
+                        name=ingredient_name
+                    )
+            django_ingredient_group = [
+                ingredients_mapping[ingredient_name]
+                for ingredient_name in group
+            ]
+            for django_ingredient in django_ingredient_group:  # type: Ingredient
+                for django_ingredient2 in django_ingredient_group:
+                    if django_ingredient != django_ingredient2:
+                        django_ingredient.replacements.add(django_ingredient2)
+                django_ingredient.save()
