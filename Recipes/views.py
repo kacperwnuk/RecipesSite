@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -50,6 +50,8 @@ class IngredientsView(ListAPIView):
 
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^name']
 
     def post(self, request):
         serializer = IngredientSerializer(data=request.data)
@@ -71,6 +73,9 @@ class CategoriesView(ListAPIView):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^name']
 
     def post(self, request):
         serializer = CategorySerializer(data=request.data)

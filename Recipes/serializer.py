@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User as BaseUser
 from Recipes.models import Recipe, Ingredient, Category, Comment, Rating, User
+from Recipes.recommender import propose_recipes
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -9,6 +10,12 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = '__all__'
+
+
+class LimitedRecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ['id', 'title', 'time']
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -51,6 +58,9 @@ class BaseUserSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     basic_info = BaseUserSerializer()
+    favourite_recipes = LimitedRecipeSerializer(many=True)
+    top_rated_recipes = serializers.SerializerMethodField()
+    recommended_recipes = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -63,3 +73,16 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create(basic_info=base_user, **validated_data)
         user.favourite_recipes.add(*favourite_recipes)
         return user
+
+    def get_top_rated_recipes(self, user):
+        ratings = Rating.objects.filter(user__pk=user.pk).order_by('-score')[:3]
+        recipes = [rating.recipe for rating in ratings]
+        serializer = LimitedRecipeSerializer(recipes, many=True)
+        return serializer.data
+
+    def get_recommended_recipes(self, user):
+        recipes = propose_recipes(User.objects.prefetch_related('favourite_recipes').get(pk=user.pk).favourite_recipes.all(),
+                                  Recipe.objects.prefetch_related('categories', 'ingredients'),
+                                  list(Category.objects.all()), list(Ingredient.objects.all()))
+        serializer = LimitedRecipeSerializer(recipes, many=True)
+        return serializer.data

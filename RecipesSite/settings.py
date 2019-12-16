@@ -32,7 +32,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'recipes-app-apsi.herokuapp.com']
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication']
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 SWAGGER_SETTINGS = {
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'corsheaders',
+    "django_filters"
 ]
 
 MIDDLEWARE = [
