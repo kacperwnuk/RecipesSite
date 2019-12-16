@@ -16,7 +16,7 @@ ACTIVITIES_PATH = os.path.join(MODULE_PATH, 'activities.json')
 
 DEVELOPER_NICKNAME = 'developer'
 DEVELOPER_PASSWORD = 'apsi-developer'
-DEVELOPER_ACTIVE = False
+DEVELOPER_ACTIVE = True
 SEED = 1
 DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 RECIPES_FREQUENCIES = {
