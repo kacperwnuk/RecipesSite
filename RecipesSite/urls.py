@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('recipes', recipe_views.AllRecipes.as_view()),
     path('recipes/<int:pk>', recipe_views.RecipeView.as_view()),
+    path('latest', recipe_views.RecipeLatestView.as_view()),
     path('ingredients', recipe_views.IngredientsView.as_view()),
     path('ingredients/<int:pk>', recipe_views.IngredientView.as_view()),
     path('categories', recipe_views.CategoriesView.as_view()),

@@ -44,6 +44,12 @@ class RecipeView(RetrieveUpdateDestroyAPIView):
     #     except:
     #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+class RecipeLatestView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = RecipeSerializer
+
+    def get_queryset(self):
+        return Recipe.objects.order_by('-creation_date')[:10]
 
 class IngredientsView(ListAPIView):
     permission_classes = (IsAuthenticated,)
