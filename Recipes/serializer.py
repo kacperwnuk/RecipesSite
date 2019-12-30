@@ -51,8 +51,11 @@ class IngredientSerializer(serializers.ModelSerializer):
         replacements_data = validated_data.pop('replacements')
         ingredient = Ingredient.objects.create(**validated_data)
         for replacement_data in replacements_data:
-            replacement = Ingredient.objects.create(**replacement_data)
-            ingredient.replacements.add(replacement)
+            try:
+                replacement = Ingredient.objects.get(name=replacement_data['name'])
+                ingredient.replacements.add(replacement)
+            except Ingredient.DoesNotExist:
+                continue
         return ingredient
 
 
@@ -76,12 +79,11 @@ class RecipeSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer
         categories_data = validated_data.pop('categories')
         recipe = Recipe.objects.create(**validated_data)
         for ingredient_data in ingredients_data:
-            replacements_data = ingredient_data.pop('replacements')
-            ingredient = Ingredient.objects.create(recipe=recipe, **ingredient_data)
-            for replacement_data in replacements_data:
-                replacement = Ingredient.objects.create(**replacement_data)
-                ingredient.replacements.add(replacement)
-            recipe.ingredients.add(ingredient)
+            try:
+                ingredient = Ingredient.objects.get(name=ingredient_data['name'])
+                recipe.ingredients.add(ingredient)
+            except KeyError:
+                continue
         # for category_data in categories_data:
         #     category = Category.objects.get(name=category_data['name'])
         #     recipe.categories.add(category)
