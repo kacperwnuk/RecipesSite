@@ -4,12 +4,56 @@ from Recipes.models import Recipe, Ingredient, Category, Comment, Rating, User
 from Recipes.recommender import propose_recipes
 
 
+class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+    """
+    A ModelSerializer that takes an additional `fields` argument that
+    controls which fields should be displayed.
+    """
+
+    def __init__(self, *args, **kwargs):
+
+        fields = kwargs['context']['request'].query_params.get('fields', None)
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields:
+            fields = fields.split(',')
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields.keys())
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+
+class ReplacementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ['name']
+        extra_kwargs = {
+            'name': {'validators': []},
+        }
+
+
 class IngredientSerializer(serializers.ModelSerializer):
-    replacements = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Ingredient.objects.all())
+    replacements = ReplacementSerializer(many=True)
+
+    # replacements = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Ingredient.objects.all())
 
     class Meta:
         model = Ingredient
         fields = '__all__'
+        extra_kwargs = {
+            'name': {'validators': []},
+        }
+
+    def create(self, validated_data):
+        replacements_data = validated_data.pop('replacements')
+        ingredient = Ingredient.objects.create(**validated_data)
+        for replacement_data in replacements_data:
+            replacement = Ingredient.objects.create(**replacement_data)
+            ingredient.replacements.add(replacement)
+        return ingredient
 
 
 class LimitedRecipeSerializer(serializers.ModelSerializer):
@@ -18,7 +62,7 @@ class LimitedRecipeSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'time']
 
 
-class RecipeSerializer(serializers.ModelSerializer):
+class RecipeSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer):
     categories = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Category.objects.all())
     # ingredients = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Ingredient.objects.all())
     ingredients = IngredientSerializer(many=True)
@@ -26,6 +70,24 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = '__all__'
+
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop('ingredients')
+        categories_data = validated_data.pop('categories')
+        recipe = Recipe.objects.create(**validated_data)
+        for ingredient_data in ingredients_data:
+            replacements_data = ingredient_data.pop('replacements')
+            ingredient = Ingredient.objects.create(recipe=recipe, **ingredient_data)
+            for replacement_data in replacements_data:
+                replacement = Ingredient.objects.create(**replacement_data)
+                ingredient.replacements.add(replacement)
+            recipe.ingredients.add(ingredient)
+        # for category_data in categories_data:
+        #     category = Category.objects.get(name=category_data['name'])
+        #     recipe.categories.add(category)
+        recipe.categories.add(*categories_data)  # slug related field stores list of objects
+        recipe.save()
+        return recipe
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -82,8 +144,9 @@ class UserSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_recommended_recipes(self, user):
-        recipes = propose_recipes(User.objects.prefetch_related('favourite_recipes').get(pk=user.pk).favourite_recipes.all(),
-                                  Recipe.objects.prefetch_related('categories', 'ingredients'),
-                                  list(Category.objects.all()), list(Ingredient.objects.all()))
+        recipes = propose_recipes(
+            User.objects.prefetch_related('favourite_recipes').get(pk=user.pk).favourite_recipes.all(),
+            Recipe.objects.prefetch_related('categories', 'ingredients'),
+            list(Category.objects.all()), list(Ingredient.objects.all()))
         serializer = LimitedRecipeSerializer(recipes, many=True)
         return serializer.data

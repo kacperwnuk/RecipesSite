@@ -20,8 +20,20 @@ class IndexView(APIView):
 class AllRecipes(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
-    queryset = Recipe.objects.all()
+    # queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
+
+    def get_queryset(self):
+        queryset = Recipe.objects.all()
+        amount = self.request.query_params.get('amount', None)
+        if amount is None:
+            return queryset.order_by('-creation_date')
+        else:
+            try:
+                amount = int(amount)
+            except ValueError:
+                return queryset.order_by('-creation_date')
+            return queryset.order_by('-creation_date')[:amount]
 
     def post(self, request, format=None):
         serializer = RecipeSerializer(data=request.data)
@@ -44,12 +56,14 @@ class RecipeView(RetrieveUpdateDestroyAPIView):
     #     except:
     #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 class RecipeLatestView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = RecipeSerializer
 
     def get_queryset(self):
         return Recipe.objects.order_by('-creation_date')[:10]
+
 
 class IngredientsView(ListAPIView):
     permission_classes = (IsAuthenticated,)

@@ -22,7 +22,6 @@ import Recipes.views as recipe_views
 
 schema_view = get_swagger_view(title='Pastebin API')
 
-
 urlpatterns = [
     path('', schema_view),
     path('admin/', admin.site.urls),
@@ -37,6 +36,6 @@ urlpatterns = [
     path('comments', recipe_views.CommentsView.as_view()),
     path('users', recipe_views.UsersView.as_view()),
     path('users/<int:pk>', recipe_views.UserView.as_view()),
-	path('auth', obtain_auth_token),
+    path('auth', obtain_auth_token),
 
 ]

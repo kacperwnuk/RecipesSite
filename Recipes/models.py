@@ -16,7 +16,7 @@ class User(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     replacements = models.ManyToManyField('Ingredient', blank=True)
 
     def __str__(self):
@@ -24,7 +24,7 @@ class Ingredient(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
