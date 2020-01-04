@@ -57,12 +57,29 @@ class RecipeView(RetrieveUpdateDestroyAPIView):
     #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class RecipeLatestView(ListAPIView):
+class RecipeSearchView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = RecipeSerializer
 
     def get_queryset(self):
-        return Recipe.objects.order_by('-creation_date')[:10]
+        params = self.request.query_params
+        query = Recipe.objects.all()
+
+        title = params.get('title', None)
+        categories = params.get('categories', None)
+        difficulty = params.get('difficulty', None)
+
+        if title:
+            query = query.filter(title__icontains=title)
+
+        if categories:
+            cat_list = set(categories.split(','))
+            query = query.filter(categories__name__in=cat_list).distinct()
+
+        if difficulty and difficulty.isnumeric():
+            query = query.filter(difficulty__lte=difficulty)
+
+        return query
 
 
 class IngredientsView(ListAPIView):
