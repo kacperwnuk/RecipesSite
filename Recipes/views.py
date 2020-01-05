@@ -66,18 +66,29 @@ class RecipeSearchView(ListAPIView):
         query = Recipe.objects.all()
 
         title = params.get('title', None)
-        categories = params.get('categories', None)
         difficulty = params.get('difficulty', None)
+        time = params.get('time', None)
+        categories = params.get('categories', None)
+        ingredients = params.get('ingredients', None)
 
         if title:
             query = query.filter(title__icontains=title)
 
-        if categories:
-            cat_list = set(categories.split(','))
-            query = query.filter(categories__name__in=cat_list).distinct()
-
         if difficulty and difficulty.isnumeric():
             query = query.filter(difficulty__lte=difficulty)
+
+        if time and time.isnumeric():
+            query = query.filter(time__lte=time)
+
+        if categories:
+            cat_list = categories.strip('[]')
+            cat_list = set(cat_list.split(','))
+            query = query.filter(categories__name__in=cat_list).distinct()
+
+        if ingredients:
+            ing_list = ingredients.strip('[]')
+            ing_list = set(ing_list.split(','))
+            query = query.filter(ingredients__name__in=ing_list).distinct()
 
         return query
 
