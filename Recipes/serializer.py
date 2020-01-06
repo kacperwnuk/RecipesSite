@@ -12,8 +12,10 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
 
-        fields = kwargs['context']['request'].query_params.get('fields', None)
-
+        try:
+            fields = kwargs['context']['request'].query_params.get('fields', None)
+        except KeyError:
+            fields = None
         # Instantiate the superclass normally
         super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
 
