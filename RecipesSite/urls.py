@@ -36,6 +36,5 @@ urlpatterns = [
     path('comments', recipe_views.CommentsView.as_view()),
     path('users', recipe_views.UsersView.as_view()),
     path('users/<int:pk>', recipe_views.UserView.as_view()),
-    path('auth', obtain_auth_token),
-
+    path('auth', recipe_views.AuthTokenView.as_view()),
 ]
