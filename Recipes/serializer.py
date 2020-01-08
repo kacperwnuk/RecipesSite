@@ -125,7 +125,7 @@ class BaseUserSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     basic_info = BaseUserSerializer()
-    favourite_recipes = LimitedRecipeSerializer(many=True)
+    favourite_recipes = LimitedRecipeSerializer(many=True, read_only=True)
     top_rated_recipes = serializers.SerializerMethodField()
     recommended_recipes = serializers.SerializerMethodField()
 
@@ -135,7 +135,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         basic_data = validated_data.pop('basic_info')
-        favourite_recipes = validated_data.pop('favourite_recipes')
+        favourite_recipes = validated_data.pop('favourite_recipes', [])
         base_user = BaseUser.objects.create_user(**basic_data)
         user = User.objects.create(basic_info=base_user, **validated_data)
         user.favourite_recipes.add(*favourite_recipes)
