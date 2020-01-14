@@ -164,6 +164,27 @@ class RatingsView(ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = RatingSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        Rating.objects.filter(user__nickname=data['user'], recipe=data['recipe']).delete()
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def get_queryset(self):
+        queryset = Rating.objects.all()
+        username = self.request.data.get('username', None)
+        if username is not None:
+            queryset = queryset.filter(user__nickname=username)
+        user_id = self.request.data.get('user_id', None)
+        if user_id is not None:
+            queryset = queryset.filter(user__id=user_id)
+        recipe = self.request.data.get('recipe_id', None)
+        if recipe is not None:
+            queryset = queryset.filter(recipe__id=recipe)
+        return queryset
+
 
 class UsersView(ListAPIView):
     queryset = User.objects.all()

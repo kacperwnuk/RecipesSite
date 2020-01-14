@@ -72,6 +72,3 @@ class Rating(models.Model):
     score = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('user', 'recipe')
