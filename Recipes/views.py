@@ -5,6 +5,7 @@ from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
 from Recipes.models import Recipe, Ingredient, Category, Comment, Rating, User
 from Recipes.serializer import RecipeSerializer, IngredientSerializer, CategorySerializer, CommentSerializer, \
@@ -58,14 +59,6 @@ class RecipeView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-
-    # def get(self, request, pk, format=None):
-    #     try:
-    #         recipe = Recipe.objects.get(pk=pk)
-    #         serializer = RecipeSerializer(recipe)
-    #         return Response(serializer.data)
-    #     except:
-    #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class RecipeSearchView(ListAPIView):
@@ -165,18 +158,11 @@ class CommentsView(ListAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RatingsView(ListAPIView):
+class RatingsView(ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
-
-    def post(self, request):
-        serializer = RatingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UsersView(ListAPIView):
