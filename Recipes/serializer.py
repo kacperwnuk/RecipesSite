@@ -154,3 +154,7 @@ class UserSerializer(serializers.ModelSerializer):
             list(Category.objects.all()), list(Ingredient.objects.all()))
         serializer = LimitedRecipeSerializer(recipes, many=True)
         return serializer.data
+
+
+class DynamicRegistrationSerializer(serializers.Serializer):
+    email = serializers.EmailField()

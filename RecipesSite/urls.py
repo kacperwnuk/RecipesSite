@@ -37,4 +37,5 @@ urlpatterns = [
     path('users', recipe_views.UsersView.as_view()),
     path('users/<int:pk>', recipe_views.UserView.as_view()),
     path('auth', recipe_views.AuthTokenView.as_view()),
+    path('registration', recipe_views.RegistrationValidationView.as_view()),
 ]

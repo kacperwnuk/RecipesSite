@@ -1,14 +1,14 @@
-from rest_framework.authtoken.models import Token
 from rest_framework import status, filters
+from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 
 from Recipes.models import Recipe, Ingredient, Category, Comment, Rating, User
 from Recipes.serializer import RecipeSerializer, IngredientSerializer, CategorySerializer, CommentSerializer, \
-    RatingSerializer, UserSerializer
+    RatingSerializer, UserSerializer, DynamicRegistrationSerializer
 
 
 class IndexView(APIView):
@@ -16,6 +16,7 @@ class IndexView(APIView):
     def get(self, request):
         list_of_urls = ['recipes', 'recipes/<int:pk>', 'ingredients', 'categories', 'ratings', 'comments', 'users']
         return Response(list_of_urls, status=status.HTTP_200_OK)
+
 
 class AuthTokenView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -25,6 +26,7 @@ class AuthTokenView(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({'id': user.id, 'token': token.key})
+
 
 class AllRecipes(ListAPIView):
     permission_classes = (IsAuthenticated,)
@@ -194,3 +196,13 @@ class UserView(RetrieveUpdateDestroyAPIView):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class RegistrationValidationView(APIView):
+    serializer_class = DynamicRegistrationSerializer
+
+    def get(self, request):
+        serializer = DynamicRegistrationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = User.objects.filter(basic_info__email=serializer.data['email'])
+        return Response({'email': bool(user)}, status=status.HTTP_200_OK)
