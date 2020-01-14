@@ -128,6 +128,7 @@ class UserSerializer(serializers.ModelSerializer):
     favourite_recipes = LimitedRecipeSerializer(many=True, read_only=True)
     top_rated_recipes = serializers.SerializerMethodField()
     recommended_recipes = serializers.SerializerMethodField()
+    my_recipes = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -152,6 +153,11 @@ class UserSerializer(serializers.ModelSerializer):
             User.objects.prefetch_related('favourite_recipes').get(pk=user.pk).favourite_recipes.all(),
             Recipe.objects.prefetch_related('categories', 'ingredients'),
             list(Category.objects.all()), list(Ingredient.objects.all()))
+        serializer = LimitedRecipeSerializer(recipes, many=True)
+        return serializer.data
+
+    def get_my_recipes(self, user):
+        recipes = Recipe.objects.filter(user__pk=user.pk)
         serializer = LimitedRecipeSerializer(recipes, many=True)
         return serializer.data
 
