@@ -74,6 +74,7 @@ class RecipeSearchView(ListAPIView):
         time = params.get('time', None)
         categories = params.get('categories', None)
         ingredients = params.get('ingredients', None)
+        amount = params.get('amount', None)
 
         if title:
             query = query.filter(title__icontains=title)
@@ -93,6 +94,9 @@ class RecipeSearchView(ListAPIView):
             ing_list = ingredients.strip('[]')
             ing_list = set(ing_list.split(','))
             query = query.filter(ingredients__name__in=ing_list).distinct()
+
+        if amount and amount.isnumeric():
+            query = query[:int(amount)]
 
         return query
 
