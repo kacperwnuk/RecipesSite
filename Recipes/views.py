@@ -75,6 +75,7 @@ class RecipeSearchView(ListAPIView):
         categories = params.get('categories', None)
         ingredients = params.get('ingredients', None)
         amount = params.get('amount', None)
+        replacements = params.get('replacements', None)
 
         if title:
             query = query.filter(title__icontains=title)
@@ -93,6 +94,11 @@ class RecipeSearchView(ListAPIView):
         if ingredients:
             ing_list = ingredients.strip('[]')
             ing_list = set(ing_list.split(','))
+            if replacements == 'true':
+                for ing_name in list(ing_list):
+                    ing = Ingredient.objects.get(name=ing_name)
+                    for replacement in ing.replacements.all():
+                        ing_list.add(replacement.name)
             query = query.filter(ingredients__name__in=ing_list).distinct()
 
         if amount and amount.isnumeric():
