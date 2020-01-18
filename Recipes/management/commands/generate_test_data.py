@@ -52,7 +52,7 @@ class Command(BaseCommand):
             random.shuffle(activities)
         with open(REPLACEMENTS_PATH) as replacements_file:
             replacements = json.load(replacements_file)
-            random.shuffle(replacements)
+            # random.shuffle(replacements)
 
         # users
         User.objects.exclude(nickname='developer').delete()
@@ -165,7 +165,7 @@ class Command(BaseCommand):
         # import matplotlib.pyplot as plt
         # g = nx.DiGraph()
 
-        for group in replacements:
+        for group in replacements['full']:
             for ingredient_name in group:
                 if ingredient_name not in ingredients_mapping:
                     ingredients_mapping[ingredient_name] = Ingredient.objects.create(
@@ -182,6 +182,22 @@ class Command(BaseCommand):
                         django_ingredient.replacements.add(django_ingredient2)
                         # g.add_edge(django_ingredient.name, django_ingredient2.name)
                 django_ingredient.save()
+
+        for ingredient_name, ingredient_replacements in replacements['directed'].items():
+            if ingredient_name not in ingredients_mapping:
+                ingredients_mapping[ingredient_name] = Ingredient.objects.create(
+                    name=ingredient_name
+                )
+            for replacement_name in ingredient_replacements:
+                if replacement_name not in ingredients_mapping:
+                    ingredients_mapping[replacement_name] = Ingredient.objects.create(
+                        name=replacement_name
+                    )
+                ingr = ingredients_mapping[ingredient_name]
+                repl = ingredients_mapping[replacement_name]
+                ingr.replacements.add(repl)
+                ingr.save()
+
 
         # nx.draw(g, with_labels=True, pos=nx.spring_layout(g, k=0.15, iterations=20))
         # plt.show()

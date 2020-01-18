@@ -1,4 +1,5 @@
-[
+{
+    "full": [
     [
         "tofu",
         "tuna",
@@ -16,13 +17,6 @@
         "crab",
         "octopus",
         "squid"
-    ],
-    [
-        "beef",
-        "meat",
-        "chicken",
-        "poultry",
-        "pork"
     ],
     [
         "cheese",
@@ -53,4 +47,13 @@
         "rice",
         "groats"
     ]
-]
+],
+    "directed": {
+        "meat": ["poultry", "chicken", "pork", "beef"],
+        "poultry": ["meat", "chicken"],
+        "chicken": ["poultry", "meat"],
+        "pork": ["meat", "beef"],
+        "beef": ["meat", "pork"]
+    }
+}
+
