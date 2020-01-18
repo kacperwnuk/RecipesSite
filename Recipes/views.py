@@ -216,10 +216,6 @@ class UserView(RetrieveUpdateDestroyAPIView):
 
 
 class RegistrationValidationView(APIView):
-    serializer_class = DynamicRegistrationSerializer
-
     def get(self, request):
-        serializer = DynamicRegistrationSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = User.objects.filter(basic_info__email=serializer.data['email'])
+        user = User.objects.filter(basic_info__email=request.GET.get('email', ''))
         return Response({'email': bool(user)}, status=status.HTTP_200_OK)
