@@ -1,7 +1,7 @@
 from rest_framework import status, filters
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,6 +17,20 @@ class IndexView(APIView):
     def get(self, request):
         list_of_urls = ['recipes', 'recipes/<int:pk>', 'ingredients', 'categories', 'ratings', 'comments', 'users']
         return Response(list_of_urls, status=status.HTTP_200_OK)
+
+
+class FavouriteRecipe(APIView):
+
+    def post(self, request):
+        try:
+            user_id = request.data['user_id']
+            recipe_id = request.data['recipe_id']
+            user = get_object_or_404(User, id=user_id)
+            recipe = get_object_or_404(Recipe, id=recipe_id)
+            user.favourite_recipes.add(recipe)
+            return Response(status=status.HTTP_200_OK)
+        except KeyError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class AuthTokenView(ObtainAuthToken):
