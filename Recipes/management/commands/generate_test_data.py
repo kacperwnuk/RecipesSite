@@ -60,19 +60,19 @@ class Command(BaseCommand):
         django_users = []
         for user in users:
             new_user = User.objects.create(
-                    nickname=user['username'],
-                    bio='Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
-                        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '
-                        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi '
-                        'ut aliquip ex ea commodo consequat.',
-                    basic_info=get_user_model().objects.create_user(
-                        username=user['username'],
-                        date_joined=datetime.strptime(user['date_joined'], DATETIME_FORMAT),
-                        email=user['email'],
-                        first_name=user['name'],
-                        last_name=user['surname'],
-                    )
+                nickname=user['username'],
+                bio='Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+                    'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '
+                    'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi '
+                    'ut aliquip ex ea commodo consequat.',
+                basic_info=get_user_model().objects.create_user(
+                    username=user['username'],
+                    date_joined=datetime.strptime(user['date_joined'], DATETIME_FORMAT),
+                    email=user['email'],
+                    first_name=user['name'],
+                    last_name=user['surname'],
                 )
+            )
             django_users.append(new_user)
             new_user.basic_info.set_password(DEVELOPER_PASSWORD)
             new_user.basic_info.save()
@@ -161,18 +161,27 @@ class Command(BaseCommand):
 
             user.save()
 
+        # import networkx as nx
+        # import matplotlib.pyplot as plt
+        # g = nx.DiGraph()
+
         for group in replacements:
             for ingredient_name in group:
-                if not ingredient_name in ingredients_mapping:
+                if ingredient_name not in ingredients_mapping:
                     ingredients_mapping[ingredient_name] = Ingredient.objects.create(
                         name=ingredient_name
                     )
+                # g.add_node(ingredient_name)
             django_ingredient_group = [
                 ingredients_mapping[ingredient_name]
                 for ingredient_name in group
             ]
             for django_ingredient in django_ingredient_group:  # type: Ingredient
                 for django_ingredient2 in django_ingredient_group:
-                    if django_ingredient != django_ingredient2:
+                    if django_ingredient != django_ingredient2 and random.random() > 0.45:
                         django_ingredient.replacements.add(django_ingredient2)
+                        # g.add_edge(django_ingredient.name, django_ingredient2.name)
                 django_ingredient.save()
+
+        # nx.draw(g, with_labels=True, pos=nx.spring_layout(g, k=0.15, iterations=20))
+        # plt.show()
