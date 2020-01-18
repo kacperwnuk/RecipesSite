@@ -20,7 +20,8 @@ class IndexView(APIView):
 
 
 class FavouriteRecipe(APIView):
-
+    permission_classes = (IsAuthenticated,)
+    
     def post(self, request):
         try:
             user_id = request.data['user_id']
