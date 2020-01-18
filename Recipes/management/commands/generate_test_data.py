@@ -59,10 +59,12 @@ class Command(BaseCommand):
         get_user_model().objects.filter(is_superuser=False).exclude(username='developer').delete()
         django_users = []
         for user in users:
-            django_users.append(
-                User.objects.create(
+            new_user = User.objects.create(
                     nickname=user['username'],
-                    bio='',
+                    bio='Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+                        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '
+                        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi '
+                        'ut aliquip ex ea commodo consequat.',
                     basic_info=get_user_model().objects.create_user(
                         username=user['username'],
                         date_joined=datetime.strptime(user['date_joined'], DATETIME_FORMAT),
@@ -71,7 +73,9 @@ class Command(BaseCommand):
                         last_name=user['surname'],
                     )
                 )
-            )
+            django_users.append(new_user)
+            new_user.basic_info.set_password(DEVELOPER_PASSWORD)
+            new_user.basic_info.save()
 
         if DEVELOPER_ACTIVE:
             if not User.objects.filter(nickname='developer'):
