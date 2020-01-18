@@ -184,13 +184,13 @@ class RatingsView(ModelViewSet):
 
     def get_queryset(self):
         queryset = Rating.objects.all()
-        username = self.request.data.get('username', None)
+        username = self.request.GET.get('username', None)
         if username is not None:
             queryset = queryset.filter(user__nickname=username)
-        user_id = self.request.data.get('user_id', None)
+        user_id = self.request.GET.get('user_id', None)
         if user_id is not None:
             queryset = queryset.filter(user__id=user_id)
-        recipe = self.request.data.get('recipe_id', None)
+        recipe = self.request.GET.get('recipe_id', None)
         if recipe is not None:
             queryset = queryset.filter(recipe__id=recipe)
         return queryset
