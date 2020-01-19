@@ -93,6 +93,32 @@ class RecipeSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer
         recipe.save()
         return recipe
 
+    def update(self, recipe, validated_data):
+        logged_user = self.context['request'].user
+        form_user = validated_data.pop('user')
+
+        if logged_user == form_user and logged_user == recipe.user:
+            ingredients_data = validated_data.pop('ingredients')
+            categories_data = validated_data.pop('categories')
+
+            for attr, value in validated_data.items():
+                setattr(recipe, attr, value)
+
+            recipe.ingredients.clear()
+
+            for ingredient_data in ingredients_data:
+                try:
+                    ingredient = Ingredient.objects.get(name=ingredient_data['name'])
+                    recipe.ingredients.add(ingredient)
+                except KeyError:
+                    continue
+
+            recipe.categories.clear()
+            recipe.categories.add(*categories_data)
+
+            recipe.save()
+        return recipe
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
