@@ -97,7 +97,7 @@ class RecipeSerializer(DynamicFieldsModelSerializer, serializers.ModelSerializer
         logged_user = self.context['request'].user
         form_user = validated_data.pop('user')
 
-        if logged_user == form_user and logged_user == recipe.user:
+        if logged_user.id == form_user.basic_info_id and logged_user.id == recipe.user.basic_info_id:
             ingredients_data = validated_data.pop('ingredients')
             categories_data = validated_data.pop('categories')
 
